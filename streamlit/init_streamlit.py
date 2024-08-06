@@ -25,8 +25,14 @@ nltk.download('omw-1.4')  # Télécharger la ressource omw-1.4
 
 import spacy
 
-# Charger le modèle spaCy à partir du dossier 'streamlit'
-nlp = spacy.load("./streamlit/en_core_web_sm")
+# Vérifiez si le modèle spaCy 'en_core_web_sm' est installé
+try:
+    nlp = spacy.load("en_core_web_sm")
+except OSError:
+    # Télécharger et installer le modèle spaCy 'en_core_web_sm'
+    from spacy.cli import download
+    download("en_core_web_sm")
+    nlp = spacy.load("en_core_web_sm")
 
 # Initialisation des objets NLTK
 lemmatizer = WordNetLemmatizer()
