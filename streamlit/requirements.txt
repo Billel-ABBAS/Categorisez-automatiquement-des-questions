@@ -1,0 +1,13 @@
+numpy
+pandas
+scikit-learn
+gensim
+lxml
+IPython
+nltk
+spacy
+beautifulsoup4
+pickle-mixin
+
+
+
