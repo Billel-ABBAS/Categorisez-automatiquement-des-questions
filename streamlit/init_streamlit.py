@@ -1,8 +1,5 @@
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-from collections import Counter
 import nltk
 from nltk import pos_tag, word_tokenize
 import re
@@ -10,12 +7,7 @@ from nltk.corpus import wordnet, stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 from bs4 import BeautifulSoup
-from sklearn.decomposition import LatentDirichletAllocation, NMF
-from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-import gensim
-from gensim.models.coherencemodel import CoherenceModel
-from sklearn.model_selection import train_test_split
 import pickle
 
 # Télécharger les ressources nécessaires de NLTK
@@ -163,4 +155,5 @@ def predict_keywords(new_text, lda_model, nmf_model, vectorizer, train_topics_ld
     predicted_semi_supervised_keywords_nmf = df_new_semi_supervised_nmf.iloc[0].nlargest(5).index.tolist()
     
     return predicted_keywords_lda, predicted_semi_supervised_keywords_lda, predicted_keywords_nmf, predicted_semi_supervised_keywords_nmf
+
 
