@@ -1,13 +1,14 @@
-numpy
-pandas
-matplotlib
-seaborn
-beautifulsoup4
-nltk
-spacy
-scikit-learn
-gensim
-lxml
+numpy==2.0.1
+pandas==2.2.2
+matplotlib==3.9.0
+seaborn==0.13.2
+beautifulsoup4==4.12.3
+nltk==3.8.1
+spacy==3.7.5
+scikit-learn==1.5.1
+gensim==4.3.2
+lxml==5.2.2
+
 
 
 
