@@ -6,14 +6,14 @@ from collections import Counter
 import nltk
 from nltk import pos_tag, word_tokenize
 import re
-from nltk.corpus import wordnet
+from nltk.corpus import wordnet, stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 from bs4 import BeautifulSoup
 from sklearn.decomposition import LatentDirichletAllocation, NMF
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-# import gensim
+import gensim
 from gensim.models.coherencemodel import CoherenceModel
 from sklearn.model_selection import train_test_split
 import pickle
@@ -21,19 +21,14 @@ import pickle
 # Télécharger les ressources nécessaires de NLTK
 nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
-nltk.download('omw-1.4')  # Télécharger la ressource omw-1.4
-
-import spacy
-
-from spacy.cli import download
-download("en_core_web_sm")
-nlp = spacy.load("en_core_web_sm")
+nltk.download('omw-1.4')
+nltk.download('stopwords')
 
 # Initialisation des objets NLTK
 lemmatizer = WordNetLemmatizer()
 
-# Définir les stop words de spaCy
-stop_words = nlp.Defaults.stop_words
+# Définir les stop words de NLTK
+stop_words = set(stopwords.words('english'))
 
 # Fonction de traitement de texte global
 def process_clean_text(doc, rejoin=True, min_len_word=2):
@@ -167,3 +162,4 @@ def predict_keywords(new_text, lda_model, nmf_model, vectorizer, train_topics_ld
     predicted_semi_supervised_keywords_nmf = df_new_semi_supervised_nmf.iloc[0].nlargest(5).index.tolist()
     
     return predicted_keywords_lda, predicted_semi_supervised_keywords_lda, predicted_keywords_nmf, predicted_semi_supervised_keywords_nmf
+
