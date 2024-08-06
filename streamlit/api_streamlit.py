@@ -1,14 +1,8 @@
 import streamlit as st
-import sys
-import os
-
-
-# Ajouter le répertoire parent au chemin de recherche de modules
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 # Importations des fonctions personnalisées
-# import init as func
-from init_streamlit import clean_html, process_clean_text, load_models_and_data, predict_keywords 
+import init_streamlit as func
+
 
 
 # Interface utilisateur avec Streamlit
@@ -21,14 +15,14 @@ if st.button('Prédire'):
     if user_input:
         try:
             # Nettoyage et tokenisation du texte d'entrée
-            cleaned_html_input = clean_html(user_input)
-            cleaned_input = process_clean_text(cleaned_html_input)
+            cleaned_html_input = func.clean_html(user_input)
+            cleaned_input = func.process_clean_text(cleaned_html_input)
             
             # Charger les modèles et les données
-            lda_model, nmf_model, vectorizer, vectorizer_tags, train_topics_lda, train_topics_nmf, tags_train = load_models_and_data() 
+            lda_model, nmf_model, vectorizer, vectorizer_tags, train_topics_lda, train_topics_nmf, tags_train = func.load_models_and_data() 
             
             # Prédiction des mots-clés avec LDA et NMF
-            predicted_keywords_lda, predicted_semi_supervised_keywords_lda, predicted_keywords_nmf, predicted_semi_supervised_keywords_nmf = predict_keywords(
+            predicted_keywords_lda, predicted_semi_supervised_keywords_lda, predicted_keywords_nmf, predicted_semi_supervised_keywords_nmf = func.predict_keywords(
                 cleaned_input, lda_model, nmf_model, vectorizer, train_topics_lda, train_topics_nmf, tags_train, vectorizer_tags
             )
             
