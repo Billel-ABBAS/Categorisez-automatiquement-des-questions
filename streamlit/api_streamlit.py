@@ -42,7 +42,9 @@ if st.button('Prédire'):
             st.write(predicted_semi_supervised_keywords_nmf)
             
         except Exception as e:
+            st.write(e)
             st.error(f"Erreur lors de la prédiction: {str(e)}")
+            
     else:
         st.error("Veuillez entrer du texte pour la prédiction.")
 
