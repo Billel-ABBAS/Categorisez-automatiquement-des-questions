@@ -13,9 +13,8 @@ from bs4 import BeautifulSoup
 from sklearn.decomposition import LatentDirichletAllocation, NMF
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-import gensim
+# import gensim
 from gensim.models.coherencemodel import CoherenceModel
-from sklearn.manifold import TSNE
 from sklearn.model_selection import train_test_split
 import pickle
 
