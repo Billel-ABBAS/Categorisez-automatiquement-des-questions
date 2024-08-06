@@ -101,25 +101,25 @@ def calculate_similarity_matrix(M_test_quest_topics, M_train_quest_topics):
     return similarity_matrix
 
 def load_models_and_data():
-    with open('../Model/unsupervised/lda_model.pkl', 'rb') as file:
+    with open('Model/unsupervised/lda_model.pkl', 'rb') as file:
         lda_model = pickle.load(file)
 
-    with open('../Model/unsupervised/nmf_model.pkl', 'rb') as file:
+    with open('Model/unsupervised/nmf_model.pkl', 'rb') as file:
         nmf_model = pickle.load(file)
 
-    with open('../Model/unsupervised/vectorizer.pkl', 'rb') as file:
+    with open('Model/unsupervised/vectorizer.pkl', 'rb') as file:
         vectorizer = pickle.load(file)
 
-    with open('../Model/unsupervised/vectorizer_tags.pkl', 'rb') as file:
+    with open('Model/unsupervised/vectorizer_tags.pkl', 'rb') as file:
         vectorizer_tags = pickle.load(file)
 
-    with open('../Model/unsupervised/train_topics_lda.pkl', 'rb') as file:
+    with open('Model/unsupervised/train_topics_lda.pkl', 'rb') as file:
         train_topics_lda = pickle.load(file)
 
-    with open('../Model/unsupervised/train_topics_nmf.pkl', 'rb') as file:
+    with open('Model/unsupervised/train_topics_nmf.pkl', 'rb') as file:
         train_topics_nmf = pickle.load(file)
 
-    file_path_tags = '../Model/unsupervised/tags_train.npz'
+    file_path_tags = 'Model/unsupervised/tags_train.npz'
     with np.load(file_path_tags) as data:
         tags_train = data['tags_train']
 
