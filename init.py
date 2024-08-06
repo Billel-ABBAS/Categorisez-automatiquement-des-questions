@@ -343,13 +343,13 @@ from sklearn.manifold import TSNE
 
 
 
-def tfidf_vectorizer_transform(text_data, tfidf_vectorizer):
+def vectorizer_transform(text_data, vectorizer):
     if isinstance(text_data, str):
         # Si l'entrée est un seul texte
-        bow = tfidf_vectorizer.transform([text_data])
+        bow = vectorizer.transform([text_data])
     else:
         # Si l'entrée est une colonne de DataFrame ou une liste de textes
-        bow = tfidf_vectorizer.transform(text_data)
+        bow = vectorizer.transform(text_data)
     return bow
 
 
@@ -488,9 +488,9 @@ def plot_tsne_lda(lda_output, n_components=2, random_state=42):
     plt.show()
 
     
-def lda_prediction(new_bow, lda_model):
+def prediction(new_bow, model, fit_transform = True):
     """
-    Prédiction avec LDA.
+    Prédiction avec LDA ou NMF.
 
     Args:
     - new_bow: Bag of words du texte à prédire.
@@ -499,28 +499,31 @@ def lda_prediction(new_bow, lda_model):
     Returns:
     - new_topics: Distribution des topics pour le nouveau texte.
     """
-    new_topics = lda_model.transform(new_bow)
+    if fit_transform:
+        new_topics = model.fit_transform(new_bow)
+    else:
+        new_topics = model.transform(new_bow)
     return new_topics
 
 
 
 # Calcule et filtre les mots basés sur les topics
-def calculate_words(new_topics, lda_model):
+def calculate_words(new_topics, model):
     """
     Calcule les mots basés sur les topics.
 
     Args:
     - new_topics: Distribution des topics pour le nouveau texte.
-    - lda_model: Modèle LDA entraîné.
+    - model: Modèle LDA OU NMF entraîné.
     
     Returns:
     - new_words: Mots basés sur les topics.
     """
-    new_words = np.dot(new_topics, lda_model.components_)
+    new_words = np.dot(new_topics, model.components_)
     return new_words
 
 # Filtre les mots
-def filter_words(new_words, lda_model, threshold=0.01):
+def filter_words(new_words, threshold=0.001):
     """
    filtre les mots basés sur les topics.
 
@@ -562,40 +565,82 @@ def plot_heatmap(matrix, title, xlabel='Topics', ylabel='Questions', figsize=(12
     plt.show()
     
    
-# Calcule le taux de couverture entre les tags prédits et les tags réels 
-def coverage_rate(predicted_tags, actual_tags):
+def coverage_rate(df, actual_column, predicted_column):
     """
-    Calcule le taux de couverture entre les tags prédits et les tags réels.
-    """
-    matches = np.sum((predicted_tags > 0) & (actual_tags > 0), axis=1)  # Comptage des correspondances
-    total = np.sum(actual_tags > 0, axis=1)  # Comptage des tags réels
-    return np.mean(matches / total)  # Calcul du taux de couverture moyen
+    Calcule le taux de couverture entre les tags réels et les tags prédits pour chaque document dans un DataFrame.
 
+    Args:
+    - df: Le DataFrame contenant les colonnes des tags réels et prédits.
+    - actual_column: Le nom de la colonne contenant les tags réels.
+    - predicted_column: Le nom de la colonne contenant les tags prédits.
+
+    Returns:
+    - float: Le taux de couverture moyen des tags pour tous les documents.
+    """
+    def coverage_for_row(row):
+        actual_tags = set(row[actual_column])
+        predicted_tags = set(row[predicted_column])
+        if not actual_tags:
+            return 0
+        matches = len(actual_tags & predicted_tags)
+        total = len(actual_tags)
+        return matches / total
+
+    coverage_rates = df.apply(coverage_for_row, axis=1)
+    return coverage_rates.mean()
+
+
+# Calcule la matrice de similarité cosinus entre les topics des questions de test et les questions d'entraînement
+def calculate_similarity_matrix(M_test_quest_topics, M_train_quest_topics):
+    """
+    Calcule la matrice de similarité cosinus entre les topics des questions de test et les questions d'entraînement.
+
+    Args:
+    - M_test_quest_topics: Matrice des topics des questions de test.
+    - M_train_quest_topics: Matrice des topics des questions d'entraînement.
+
+    Returns:
+    - similarity_matrix: Matrice de similarité cosinus.
+    """
+    similarity_matrix = cosine_similarity(M_test_quest_topics, M_train_quest_topics)  # Matrice de similarité
+    return similarity_matrix
 
 
 # Définition de la fonction de prédiction
-def predict_keywords(new_text, lda_model, tfidf_vectorizer, train_topics, tags_train, vectorizer_tags, threshold=0.01):
+def predict_keywords(new_text, lda_model, nmf_model, vectorizer, train_topics_lda, train_topics_nmf, tags_train, vectorizer_tags):
+    
     # Prétraitement du texte
-    new_bow = tfidf_vectorizer_transform([new_text], tfidf_vectorizer)
+    new_bow = vectorizer.transform([new_text])
     
     # Prédiction avec LDA
-    new_topics = lda_prediction(new_bow, lda_model)
-    new_words = calculate_words(new_topics, lda_model)
-    new_words_filtered = filter_words(new_words, lda_model, threshold=0.01)
+    new_topics_lda = lda_model.transform(new_bow)
+    new_words_lda = calculate_words(new_topics_lda, lda_model)
+    new_words_filtered_lda = filter_words(new_words_lda, threshold=0)
+    
+    # Prédiction avec NMF
+    new_topics_nmf = nmf_model.transform(new_bow)
+    new_words_nmf = calculate_words(new_topics_nmf, nmf_model)
+    new_words_filtered_nmf = filter_words(new_words_nmf, threshold=0)
     
     # Prédiction semi-supervisée
-    similarity_matrix = cosine_similarity(new_topics, train_topics)
-    semi_supervised_keywords = np.dot(similarity_matrix, tags_train)
+    similarity_matrix_lda = calculate_similarity_matrix(new_topics_lda, train_topics_lda)
+    semi_supervised_keywords_lda = np.dot(similarity_matrix_lda, tags_train)
+    similarity_matrix_nmf = calculate_similarity_matrix(new_topics_nmf, train_topics_nmf)
+    semi_supervised_keywords_nmf = np.dot(similarity_matrix_nmf, tags_train)
     
     # Conversion en DataFrame pour visualisation
-    words = tfidf_vectorizer.get_feature_names_out()
+    words = vectorizer.get_feature_names_out()
     tags = vectorizer_tags.get_feature_names_out()
     
-    df_new_words = pd.DataFrame(new_words_filtered, columns=words)
-    df_new_semi_supervised = pd.DataFrame(semi_supervised_keywords, columns=tags)
+    df_new_words_lda = pd.DataFrame(new_words_filtered_lda, columns=words)
+    df_new_semi_supervised_lda = pd.DataFrame(semi_supervised_keywords_lda, columns=tags)
+    df_new_words_nmf = pd.DataFrame(new_words_filtered_nmf, columns=words)
+    df_new_semi_supervised_nmf = pd.DataFrame(semi_supervised_keywords_nmf, columns=tags)
     
     # Sélection des 5 mots clés les plus pertinents pour chaque prédiction
-    predicted_keywords = df_new_words.iloc[0].nlargest(5).index.tolist()
-    predicted_semi_supervised_keywords = df_new_semi_supervised.iloc[0].nlargest(5).index.tolist()
+    predicted_keywords_lda = df_new_words_lda.iloc[0].nlargest(5).index.tolist()
+    predicted_semi_supervised_keywords_lda = df_new_semi_supervised_lda.iloc[0].nlargest(5).index.tolist()
+    predicted_keywords_nmf = df_new_words_nmf.iloc[0].nlargest(5).index.tolist()
+    predicted_semi_supervised_keywords_nmf = df_new_semi_supervised_nmf.iloc[0].nlargest(5).index.tolist()
     
-    return predicted_keywords, predicted_semi_supervised_keywords
+    return predicted_keywords_lda, predicted_semi_supervised_keywords_lda, predicted_keywords_nmf, predicted_semi_supervised_keywords_nmf
