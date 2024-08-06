@@ -1,13 +1,13 @@
 numpy
 pandas
+matplotlib
+seaborn
+beautifulsoup4
+nltk
+spacy
 scikit-learn
 gensim
 lxml
-IPython
-nltk
-spacy
-beautifulsoup4
-pickle-mixin
 
 
 
