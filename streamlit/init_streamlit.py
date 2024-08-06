@@ -24,11 +24,10 @@ nltk.download('averaged_perceptron_tagger')
 nltk.download('omw-1.4')  # Télécharger la ressource omw-1.4
 
 
+
+
 import spacy
-
-import en_core_web_sm
-
-nlp = en_core_web_sm.load()
+nlp = spacy.load("en_core_web_sm")
 
 # Initialisation des objets NLTK
 lemmatizer = WordNetLemmatizer()
