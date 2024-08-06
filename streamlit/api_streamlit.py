@@ -8,7 +8,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 
 # Importations des fonctions personnalisées
 # import init as func
-from init import clean_html, process_clean_text, load_models_and_data, predict_keywords 
+from init_streamlit import clean_html, process_clean_text, load_models_and_data, predict_keywords 
 
 
 # Interface utilisateur avec Streamlit
