@@ -1,0 +1,14 @@
+aliases: []
+creation_timestamp: 1723162397576
+current_stage: None
+description: ''
+last_updated_timestamp: 1723162397576
+name: Best_Model
+run_id: 40d210f1756c4dd7ae71decff7a56f36
+run_link: ''
+source: mlflow-artifacts:/643567822930241995/40d210f1756c4dd7ae71decff7a56f36/artifacts/XGBoost
+status: READY
+status_message: null
+storage_location: mlflow-artifacts:/643567822930241995/40d210f1756c4dd7ae71decff7a56f36/artifacts/XGBoost
+user_id: null
+version: 1

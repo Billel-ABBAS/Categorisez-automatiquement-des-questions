@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/643567822930241995/998839267eff4ade9af0828f327747b9/artifacts
+end_time: 1723161368580
+entry_point_name: ''
+experiment_id: '643567822930241995'
+lifecycle_stage: active
+run_id: 998839267eff4ade9af0828f327747b9
+run_name: Support Vector Machine
+run_uuid: 998839267eff4ade9af0828f327747b9
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1723161357908
+status: 3
+tags: []
+user_id: bille
