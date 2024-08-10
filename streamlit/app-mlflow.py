@@ -18,7 +18,7 @@ import os
 import ast
 
 # Configurer l'URI de suivi pour utiliser un serveur de suivi MLflow distant
-mlflow.set_tracking_uri("http://localhost:5000")
+mlflow.set_tracking_uri("http://127.0.0.1:5000")
 mlflow.set_experiment("tagging_experiment_new0")
 
 # Charger les données nettoyées
