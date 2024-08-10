@@ -9,7 +9,7 @@ import nltk
 from nltk import pos_tag, word_tokenize
 import re
 from nltk import pos_tag
-from nltk.corpus import wordnet
+from nltk.corpus import wordnet, stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 from bs4 import BeautifulSoup
@@ -19,9 +19,13 @@ from nltk.corpus import wordnet as wn
 nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
 nltk.download('omw-1.4')  # Télécharger la ressource omw-1.4
+nltk.download('stopwords')
 
-import spacy
-nlp = spacy.load("en_core_web_sm")
+# Définir les stop words de NLTK
+stop_words = set(stopwords.words('english'))
+
+# import spacy
+# nlp = spacy.load("en_core_web_sm")
 
 # # Charger le modèle spaCy en anglais
 # import en_core_web_sm
@@ -31,8 +35,8 @@ nlp = spacy.load("en_core_web_sm")
 # Initialisation des objets NLTK
 lemmatizer = WordNetLemmatizer()
 
-# Définir les stop words de spaCy
-stop_words = nlp.Defaults.stop_words
+# # Définir les stop words de spaCy
+# stop_words = nlp.Defaults.stop_words
 
 ################# Partie exploratoire ##########################
 
@@ -188,7 +192,7 @@ def process_clean_text(doc, rejoin=True, min_len_word=2):
     raw_tokens_list = word_tokenize(doc)
     raw_tokens_list = ['c#' if token == 'c' else token for token in raw_tokens_list]
 
-    # Suppression des stop words avec spaCy
+    # Suppression des stop words avec nltk
     cleaned_tokens_list = [w for w in raw_tokens_list if w not in stop_words]
 
     # Suppression des mots de longueur inférieure à min_len_word
