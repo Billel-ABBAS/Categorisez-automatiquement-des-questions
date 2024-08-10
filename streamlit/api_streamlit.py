@@ -12,7 +12,7 @@ from utils import utils_exploratoire as func_exploratoire
 from utils import utils_supervised as func_supervised
 
 # Configurer MLflow pour utiliser un chemin compatible avec WSL
-mlflow.set_tracking_uri("http://localhost:5000")
+mlflow.set_tracking_uri("http://127.0.0.1:5000")
 
 # Interface utilisateur avec Streamlit
 st.title('Prédiction de mots-clés avec le Meilleur Modèle')
