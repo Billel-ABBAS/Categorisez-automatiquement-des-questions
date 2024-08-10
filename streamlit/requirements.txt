@@ -1,8 +1,7 @@
+streamlit
+mlflow
+scikit-learn
+joblib
 numpy
 pandas
-beautifulsoup4
-nltk
-scikit-learn
-gensim
-lxml
 

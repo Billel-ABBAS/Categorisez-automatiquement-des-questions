@@ -251,6 +251,7 @@ def plot_heatmap(matrix, title, xlabel='Topics', ylabel='Questions', figsize=(12
     plt.show()
     
    
+# Calcule le taux de couverture entre les tags réels et les tags prédits 
 def coverage_rate(df, actual_column, predicted_column):
     """
     Calcule le taux de couverture entre les tags réels et les tags prédits pour chaque document dans un DataFrame.

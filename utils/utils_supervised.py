@@ -83,17 +83,16 @@ def train_and_evaluate(model_name, model, X_train, y_train, X_test, y_test, mode
     print(f'{model_name} - F1 Score: {f1}')
     print(f'{model_name} - Jaccard Score: {jaccard_avg}')
     
-    # Enregistrer le modèle dans un fichier
-    model_path = f'Model/supervised/{model_name.replace(" ", "_").lower()}.pkl'
-    dump(model, model_path)
-    print(f'{model_name} saved to {model_path}')
+    # # Enregistrer le modèle dans un fichier
+    # model_path = f'Model/supervised/{model_name.replace(" ", "_").lower()}.pkl'
+    # dump(model, model_path)
+    # print(f'{model_name} saved to {model_path}')
     
     # Retourner le modèle entraîné et le score moyen de Jaccard
     return model, jaccard_avg
 
 
 # Fonction de prédiction des tags pour un nouveau texte
-import numpy as np
 
 def predict_tags(text, model, tfidf_vectorizer, mlb, top_n=5):
   """
@@ -132,3 +131,29 @@ def predict_tags(text, model, tfidf_vectorizer, mlb, top_n=5):
   
   # Retourner les tags prédits pour le texte donné
   return top_tags[0] if top_tags else []
+
+
+# Calcule le taux de couverture entre les tags réels et les tags prédits
+def coverage_rate(df, actual_column, predicted_column):
+    """
+    Calcule le taux de couverture entre les tags réels et les tags prédits pour chaque document dans un DataFrame.
+
+    Args:
+    - df: Le DataFrame contenant les colonnes des tags réels et prédits.
+    - actual_column: Le nom de la colonne contenant les tags réels.
+    - predicted_column: Le nom de la colonne contenant les tags prédits.
+
+    Returns:
+    - float: Le taux de couverture moyen des tags pour tous les documents.
+    """
+    def coverage_for_row(row):
+        actual_tags = set(row[actual_column])
+        predicted_tags = set(row[predicted_column])
+        if not actual_tags:
+            return 0
+        matches = len(actual_tags & predicted_tags)
+        total = len(actual_tags)
+        return matches / total
+
+    coverage_rates = df.apply(coverage_for_row, axis=1)
+    return coverage_rates.mean()
