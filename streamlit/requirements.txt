@@ -10,3 +10,4 @@ wordcloud
 nltk
 beautifulsoup4
 ipython
+setuptools
