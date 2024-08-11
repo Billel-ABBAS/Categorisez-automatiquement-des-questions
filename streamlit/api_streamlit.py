@@ -12,7 +12,7 @@ from utils import utils_exploratoire as func_exploratoire
 from utils import utils_supervised as func_supervised
 
 # Configurer MLflow pour utiliser un chemin compatible avec WSL
-mlflow.set_tracking_uri("http://127.0.0.1:5000")
+mlflow.set_tracking_uri("http://ec2-54-197-146-14.compute-1.amazonaws.com:5000/")
 
 # Interface utilisateur avec Streamlit
 st.title('Prédiction de mots-clés avec le Meilleur Modèle')
@@ -37,19 +37,19 @@ def load_mlflow_model(model_uri, model_type='sklearn'):
 # Charger les artefacts depuis MLflow
 
 # Charger le TfidfVectorizer depuis MLflow
-logged_vectorizer = 'runs:/34cbdd788b13412cb60f3ec77328a447/vectorizer_supervised'
+logged_vectorizer = 'runs:/c6d4a460a6d4425f8a9e9db7d374c0c0/vectorizer_supervised'
 vectorizer_supervised = load_mlflow_model(logged_vectorizer, 'sklearn')
 #   if vectorizer_supervised is not None:
 #       st.success("Vectorizer supervisé chargé avec succès!")
 
 # Charger le MultiLabelBinarizer depuis MLflow
-logged_mlb = 'runs:/1fd23bd293ce42aabca5a4d00f94038d/mlb'
+logged_mlb = 'runs:/272a9f59470c400a989d26a7555929ce/mlb'
 mlb = load_mlflow_model(logged_mlb, 'sklearn')
 #   if mlb is not None:
 #       st.success("MultiLabelBinarizer chargé avec succès!")
 
 # Charger le modèle XGBoost en tant que PyFuncModel depuis MLflow
-logged_model = 'runs:/40d210f1756c4dd7ae71decff7a56f36/XGBoost'
+logged_model = 'runs:/a4ead1bae4f9424bb0ec41236e5bd50d/XGBoost'
 best_model = load_mlflow_model(logged_model, 'pyfunc')
 #   if best_model is not None:
 #       st.success("Meilleur modèle XGBoost chargé avec succès!")

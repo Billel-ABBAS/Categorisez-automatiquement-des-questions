@@ -93,44 +93,36 @@ def train_and_evaluate(model_name, model, X_train, y_train, X_test, y_test, mode
 
 
 # Fonction de prédiction des tags pour un nouveau texte
-
 def predict_tags(text, model, tfidf_vectorizer, mlb, top_n=5):
-  """
-  Prédit les tags pour un texte donné en utilisant un modèle entraîné, un vectoriseur TF-IDF et un MultiLabelBinarizer.
+    """
+    Prédit les tags pour un texte donné en utilisant un modèle entraîné, un vectoriseur TF-IDF et un MultiLabelBinarizer.
 
-  Parameters:
-  text (str): Le texte à analyser.
-  model (PyFuncModel): Le modèle MLflow chargé.
-  tfidf_vectorizer (TfidfVectorizer): Le vectoriseur TF-IDF entraîné.
-  mlb (MultiLabelBinarizer): L'encodeur multi-label entraîné.
-  top_n (int): Le nombre de tags les plus probables à retourner.
+    Parameters:
+    text (str): Le texte à analyser.
+    model (sklearn model): Le modèle de machine learning entraîné.
+    tfidf_vectorizer (TfidfVectorizer): Le vectoriseur TF-IDF entraîné.
+    mlb (MultiLabelBinarizer): L'encodeur multi-label entraîné.
+    top_n (int): Le nombre de tags les plus probables à retourner.
 
-  Returns:
-  list: Les tags prédits pour le texte donné.
-  """
-  
-  # Transformer le texte en vecteur TF-IDF
-  text_tfidf = tfidf_vectorizer.transform([text])
-  
-  # Utiliser la méthode predict du PyFuncModel
-  predicted_probs = model.predict(text_tfidf)
-  
-  # Vérifier si predicted_probs est un numpy array
-  if not isinstance(predicted_probs, np.ndarray):
-      predicted_probs = np.array(predicted_probs)
-  
-  # S'assurer que predicted_probs est 2D
-  if predicted_probs.ndim == 1:
-      predicted_probs = predicted_probs.reshape(1, -1)
-  
-  # Sélectionner les indices des top_n probabilités les plus élevées
-  top_indices = np.argsort(predicted_probs, axis=1)[:, -top_n:]
-  
-  # Convertir les indices des top_n probabilités en tags
-  top_tags = [[mlb.classes_[i] for i in indices] for indices in top_indices]
-  
-  # Retourner les tags prédits pour le texte donné
-  return top_tags[0] if top_tags else []
+    Returns:
+    list: Les tags prédits pour le texte donné.
+    """
+    
+    # Transformer le texte en vecteur TF-IDF
+    text_tfidf = tfidf_vectorizer.transform([text])
+    
+    # Prédire les probabilités des tags pour le texte donné
+    predicted_probs = model.predict_proba(text_tfidf)
+        
+    # Sélectionner les indices des top_n probabilités les plus élevées
+    top_indices = np.argsort(predicted_probs, axis=1)[:, -top_n:]
+    
+    # Convertir les indices des top_n probabilités en tags
+    top_tags = [ [mlb.classes_[i] for i in indices] for indices in top_indices ]
+    
+    # Retourner les tags prédits pour le texte donné
+    return top_tags[0] if top_tags else []
+
 
 
 # Calcule le taux de couverture entre les tags réels et les tags prédits

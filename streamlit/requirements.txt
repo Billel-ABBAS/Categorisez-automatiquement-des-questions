@@ -10,4 +10,3 @@ wordcloud
 nltk
 beautifulsoup4
 ipython
-spacy

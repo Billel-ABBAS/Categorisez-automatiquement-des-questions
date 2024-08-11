@@ -24,19 +24,9 @@ nltk.download('stopwords')
 # Définir les stop words de NLTK
 stop_words = set(stopwords.words('english'))
 
-# import spacy
-# nlp = spacy.load("en_core_web_sm")
-
-# # Charger le modèle spaCy en anglais
-# import en_core_web_sm
-# nlp = spacy.load('en_core_web_sm', exclude=['tok2vec', 'ner', 'parser', 'attribute_ruler', 'lemmatizer'])
-# nlp = en_core_web_sm.load()
-
 # Initialisation des objets NLTK
 lemmatizer = WordNetLemmatizer()
 
-# # Définir les stop words de spaCy
-# stop_words = nlp.Defaults.stop_words
 
 ################# Partie exploratoire ##########################
 
@@ -129,7 +119,7 @@ def plot_pos_pie_chart(pos_counts):
     plt.show()
 
 # Fonction de traitement de texte global
-def process_clean_text(doc, rejoin=True, min_len_word=2):
+def process_clean_text(doc, rejoin=True, min_len_word=2, stop_words=stop_words):
     """
     Fonction de traitement de texte global
 
