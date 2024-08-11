@@ -11,3 +11,4 @@ nltk
 beautifulsoup4
 ipython
 setuptools
+boto3
