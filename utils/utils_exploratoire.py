@@ -8,36 +8,25 @@ from IPython.display import display
 import nltk
 from nltk import pos_tag, word_tokenize
 import re
-from nltk import pos_tag
-from nltk.corpus import wordnet, stopwords
-# from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 from bs4 import BeautifulSoup
 from nltk.corpus import wordnet as wn
 
+
 # Télécharger les ressources nécessaires de NLTK
 nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
-nltk.download('omw-1.4')  # Télécharger la ressource omw-1.4
+nltk.download('omw-1.4')
 nltk.download('stopwords')
-
-# Définir les stop words de NLTK
-stop_words = set(stopwords.words('english'))
+nltk.download('wordnet')
 
 # Initialisation des objets NLTK
 lemmatizer = WordNetLemmatizer()
 
-import nltk
-
-# Vérifier si les ressources sont déjà disponibles, sinon les télécharger
-nltk.data.path.append('/home/appuser/nltk_data')
-if not nltk.data.find('tokenizers/punkt'):
-    nltk.download('punkt')
-if not nltk.data.find('taggers/averaged_perceptron_tagger'):
-    nltk.download('averaged_perceptron_tagger')
-if not nltk.data.find('corpora/stopwords'):
-    nltk.download('stopwords')
-
+# Définir les stop words de NLTK
+stop_words = set(stopwords.words('english'))
 
 
 ################# Partie exploratoire ##########################
