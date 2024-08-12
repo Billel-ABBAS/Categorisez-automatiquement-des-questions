@@ -4,6 +4,9 @@ scikit-learn
 joblib
 numpy
 pandas
+matplotlib
+seaborn
+wordcloud
 nltk
 beautifulsoup4
 ipython
@@ -11,4 +14,3 @@ setuptools
 boto3
 xgboost
 lxml
-
