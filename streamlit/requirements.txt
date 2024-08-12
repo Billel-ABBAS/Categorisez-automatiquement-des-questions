@@ -1,10 +1,13 @@
+streamlit
 mlflow
 scikit-learn
+joblib
 numpy
 pandas
 nltk
 beautifulsoup4
 ipython
+setuptools
 boto3
 xgboost
 lxml
