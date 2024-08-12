@@ -44,19 +44,19 @@ def load_mlflow_model(model_uri, model_type='sklearn'):
 
 # Charger le TfidfVectorizer depuis MLflow
 logged_vectorizer = 'runs:/c6d4a460a6d4425f8a9e9db7d374c0c0/vectorizer_supervised'
-# vectorizer_supervised = load_mlflow_model(logged_vectorizer, 'sklearn')
+vectorizer_supervised = load_mlflow_model(logged_vectorizer, 'sklearn')
 #   if vectorizer_supervised is not None:
 #       st.success("Vectorizer supervisé chargé avec succès!")
 
 # Charger le MultiLabelBinarizer depuis MLflow
 logged_mlb = 'runs:/272a9f59470c400a989d26a7555929ce/mlb'
-# mlb = load_mlflow_model(logged_mlb, 'sklearn')
+mlb = load_mlflow_model(logged_mlb, 'sklearn')
 #   if mlb is not None:
 #       st.success("MultiLabelBinarizer chargé avec succès!")
 
 # Charger le modèle XGBoost en tant que PyFuncModel depuis MLflow
 logged_model = 'runs:/a4ead1bae4f9424bb0ec41236e5bd50d/XGBoost'
-# best_model = load_mlflow_model(logged_model, 'pyfunc')
+best_model = load_mlflow_model(logged_model, 'pyfunc')
 #   if best_model is not None:
 #       st.success("Meilleur modèle XGBoost chargé avec succès!")
 
@@ -75,11 +75,6 @@ if st.button('Prédire'):
       
       # Prédiction des mots-clés avec le modèle supervisé
     #   predicted_tags = func_supervised.predict_tags(cleaned_input, best_model, vectorizer_supervised, mlb)
-    
-      vectorizer_supervised = load_mlflow_model(logged_vectorizer, 'sklearn')
-      mlb = load_mlflow_model(logged_mlb, 'sklearn')
-      best_model = load_mlflow_model(logged_model, 'pyfunc')
-    
       predicted_tags = func.predict_tags(cleaned_input, best_model, vectorizer_supervised, mlb)
       
       # Afficher les résultats
