@@ -13,4 +13,5 @@ ipython
 setuptools
 boto3
 xgboost
+lxml
 
