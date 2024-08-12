@@ -10,5 +10,5 @@ beautifulsoup4==4.12.2
 lxml==4.9.2
 xgboost
 numpy==1.25.0
-
-
+seaborn
+WordCloud 
