@@ -1,9 +1,8 @@
 import numpy as np
-import pandas as pd
 import nltk
 from nltk import pos_tag, word_tokenize
 import re
-from nltk.corpus import wordnet, stopwords
+from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 from bs4 import BeautifulSoup
