@@ -10,11 +10,13 @@ import os
 aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID')
 aws_secret_access_key = os.getenv('AWS_SECRET_ACCESS_KEY')
 
-# Ajouter le répertoire parent au PYTHONPATH
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+# # Ajouter le répertoire parent au PYTHONPATH
+# sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from utils import utils_exploratoire as func_exploratoire
-from utils import utils_supervised as func_supervised
+# from utils import utils_exploratoire as func_exploratoire
+# from utils import utils_supervised as func_supervised
+
+import utils as func
 
 # Configurer MLflow pour utiliser un chemin compatible avec WSL
 mlflow.set_tracking_uri("http://ec2-44-204-37-245.compute-1.amazonaws.com:5000/")
@@ -67,11 +69,14 @@ user_input = st.text_area("Entrez le texte pour la prédiction des mots-clés:")
 if st.button('Prédire'):
   if user_input:
       # Nettoyage et tokenisation du texte d'entrée
-      cleaned_html_input = func_exploratoire.clean_html(user_input)
-      cleaned_input = func_exploratoire.process_clean_text(cleaned_html_input)
+    #   cleaned_html_input = func_exploratoire.clean_html(user_input)
+      cleaned_html_input = func.clean_html(user_input)
+    #   cleaned_input = func_exploratoire.process_clean_text(cleaned_html_input)
+      cleaned_input = func.process_clean_text(cleaned_html_input)
       
       # Prédiction des mots-clés avec le modèle supervisé
-      predicted_tags = func_supervised.predict_tags(cleaned_input, best_model, vectorizer_supervised, mlb)
+    #   predicted_tags = func_supervised.predict_tags(cleaned_input, best_model, vectorizer_supervised, mlb)
+      predicted_tags = func.predict_tags(cleaned_input, best_model, vectorizer_supervised, mlb)
       
       # Afficher les résultats
       st.subheader('Texte nettoyé:')
