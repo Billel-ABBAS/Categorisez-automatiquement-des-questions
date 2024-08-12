@@ -8,7 +8,7 @@ boto3==1.28.0
 nltk==3.8.0
 beautifulsoup4==4.12.2
 lxml==4.9.2
-xgboost==1.5.0
+xgboost
 numpy==1.25.0
 
 
