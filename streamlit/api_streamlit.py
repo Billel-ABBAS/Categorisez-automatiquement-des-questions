@@ -56,7 +56,7 @@ mlb = load_mlflow_model(logged_mlb, 'sklearn')
 
 # Charger le modèle XGBoost en tant que PyFuncModel depuis MLflow
 logged_model = 'runs:/a4ead1bae4f9424bb0ec41236e5bd50d/XGBoost'
-best_model = load_mlflow_model(logged_model, 'pyfunc')
+best_model = load_mlflow_model(logged_model, 'sklearn')
 #   if best_model is not None:
 #       st.success("Meilleur modèle XGBoost chargé avec succès!")
 
