@@ -3,7 +3,7 @@ import mlflow
 import mlflow.sklearn
 import mlflow.pyfunc
 import os
-
+import sys
 
 # Récupérer les identifiants AWS depuis les variables d'environnement configurées dans Streamlit Cloud
 aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID')
