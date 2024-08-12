@@ -4,6 +4,10 @@ import mlflow.sklearn
 import mlflow.pyfunc
 import sys
 import os
+from dotenv import load_dotenv
+
+# Charger les variables d'environnement depuis le fichier .env
+load_dotenv()
 
 # Récupérer les identifiants AWS depuis les variables d'environnement
 aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID')

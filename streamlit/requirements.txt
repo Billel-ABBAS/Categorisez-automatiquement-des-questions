@@ -12,3 +12,4 @@ beautifulsoup4
 ipython
 setuptools
 boto3
+dotenv
