@@ -10,7 +10,7 @@ from nltk import pos_tag, word_tokenize
 import re
 from nltk import pos_tag
 from nltk.corpus import wordnet, stopwords
-from nltk.tokenize import word_tokenize
+# from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 from bs4 import BeautifulSoup
 from nltk.corpus import wordnet as wn
