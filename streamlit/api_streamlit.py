@@ -2,7 +2,6 @@ import streamlit as st
 import mlflow
 import mlflow.sklearn
 import mlflow.pyfunc
-import sys
 import os
 
 
