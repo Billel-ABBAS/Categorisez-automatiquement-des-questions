@@ -5,11 +5,6 @@ import mlflow.pyfunc
 import sys
 import os
 
-import nltk
-nltk.download('punkt')
-nltk.download('averaged_perceptron_tagger')
-nltk.download('stopwords')
-
 
 # Récupérer les identifiants AWS depuis les variables d'environnement configurées dans Streamlit Cloud
 aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID')
