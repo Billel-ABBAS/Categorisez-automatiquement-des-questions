@@ -1,6 +1,6 @@
 streamlit
 mlflow
-scikit-learn==1.2.2
+scikit-learn
 joblib
 numpy
 pandas
