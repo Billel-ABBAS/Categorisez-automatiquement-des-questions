@@ -27,6 +27,18 @@ stop_words = set(stopwords.words('english'))
 # Initialisation des objets NLTK
 lemmatizer = WordNetLemmatizer()
 
+import nltk
+
+# Vérifier si les ressources sont déjà disponibles, sinon les télécharger
+nltk.data.path.append('/home/appuser/nltk_data')
+if not nltk.data.find('tokenizers/punkt'):
+    nltk.download('punkt')
+if not nltk.data.find('taggers/averaged_perceptron_tagger'):
+    nltk.download('averaged_perceptron_tagger')
+if not nltk.data.find('corpora/stopwords'):
+    nltk.download('stopwords')
+
+
 
 ################# Partie exploratoire ##########################
 
