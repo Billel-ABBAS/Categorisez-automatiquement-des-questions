@@ -12,3 +12,4 @@ xgboost
 numpy==1.25.0
 seaborn
 WordCloud 
+pytest>=7.0
