@@ -3,34 +3,35 @@ name: Build and Test Python Project
 on:
   push:
     branches:
-      - main  
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3  
       name: Checkout code
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4 
       with:
-        python-version: '3.8'  
+        python-version: '3.8'
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r Projet_5/streamlit/requirements.txt
+        pip install -r streamlit/requirements.txt  # Chemin vers le requirements.txt dans le dossier streamlit
 
     - name: Set up AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-1  
+        aws-region: us-east-1
 
-    - name: Run tests
-      run: pytest Projet_5/streamlit/test_utils_api.py
+    - name: Run pytest
+      run: pytest streamlit/test_utils_api.py  
+
 
     
