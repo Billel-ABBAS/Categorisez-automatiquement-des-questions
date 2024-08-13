@@ -83,11 +83,6 @@ def train_and_evaluate(model_name, model, X_train, y_train, X_test, y_test, mode
     print(f'{model_name} - F1 Score: {f1}')
     print(f'{model_name} - Jaccard Score: {jaccard_avg}')
     
-    # # Enregistrer le modèle dans un fichier
-    # model_path = f'Model/supervised/{model_name.replace(" ", "_").lower()}.pkl'
-    # dump(model, model_path)
-    # print(f'{model_name} saved to {model_path}')
-    
     # Retourner le modèle entraîné et le score moyen de Jaccard
     return model, jaccard_avg
 
@@ -149,3 +144,4 @@ def coverage_rate(df, actual_column, predicted_column):
 
     coverage_rates = df.apply(coverage_for_row, axis=1)
     return coverage_rates.mean()
+

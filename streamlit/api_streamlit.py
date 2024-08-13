@@ -50,7 +50,7 @@ logged_mlb = 'runs:/272a9f59470c400a989d26a7555929ce/mlb'
 mlb = load_mlflow_model(logged_mlb, 'sklearn')
 
 
-# Charger le modèle XGBoost en tant que PyFuncModel depuis MLflow
+# Charger le modèle XGBoost en tant que Sklearn Model depuis MLflow
 logged_model = 'runs:/a4ead1bae4f9424bb0ec41236e5bd50d/XGBoost'
 best_model = load_mlflow_model(logged_model, 'sklearn')
 
