@@ -21,11 +21,11 @@ jobs:
     - name: Install system dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y libxml2-dev libxslt-dev  
+        sudo apt-get install -y libxml2-dev libxslt-dev python3-distutils   
 
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
+        python -m pip install --upgrade pip setuptools wheel
         pip install -r streamlit/requirements.txt
 
     - name: Set up AWS credentials
