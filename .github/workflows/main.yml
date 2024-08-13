@@ -10,11 +10,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3  
+    - uses: actions/checkout@v4  # Updated to v4 for Node.js 20 compatibility
       name: Checkout code
 
     - name: Set up Python
-      uses: actions/setup-python@v4  
+      uses: actions/setup-python@v5  # Updated to v5 for Node.js 20 compatibility
       with:
         python-version: '3.8'
 
@@ -32,6 +32,7 @@ jobs:
 
     - name: Run pytest
       run: pytest streamlit/test_utils_api.py
+
 
 
     
