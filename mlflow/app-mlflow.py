@@ -1,4 +1,4 @@
-from sklearn.linear_model import LogisticRegression, SGDClassifier, ElasticNet
+from sklearn.linear_model import LogisticRegression, SGDClassifier
 from sklearn.svm import LinearSVC
 from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
 from sklearn.multiclass import OneVsRestClassifier
