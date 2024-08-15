@@ -36,7 +36,7 @@ jobs:
         aws-region: us-east-1
 
     - name: Run pytest
-      run: pytest streamlit/test_utils_api.py
+      run: pytest tests/test_utils.py
 
 
 
