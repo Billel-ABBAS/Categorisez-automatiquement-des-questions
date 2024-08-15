@@ -1,10 +1,16 @@
 
+import os
+import sys                                   
+                                   
+# Ajouter le répertoire parent au PYTHONPATH
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))                                  
+                                   
                                    ### Partie exploratoire ###
 
 ########################## Teste de la fonction taux_de_Remplissage_tableau ############################
 import pytest
 import pandas as pd
-from utils_exploratoire import taux_de_Remplissage_tableau
+from utils.utils_exploratoire import taux_de_Remplissage_tableau
 
 def test_taux_de_Remplissage_tableau():
     # Création d'un DataFrame de test
@@ -19,7 +25,7 @@ def test_taux_de_Remplissage_tableau():
 ########################## Teste de la fonction taux_de_Remplissage_tableau ############################
 
 import pytest
-from utils_exploratoire import split_tags
+from utils.utils_exploratoire import split_tags
 
 test_data = [
     ("<python><data-science><3x><machine.learning>", ['python', 'data', 'science', 'machinelearning']),
@@ -36,7 +42,7 @@ def test_split_tags(input_tags, expected_output):
 ########################## Teste de la fonction display_tokens_infos ############################
 
 import pytest
-from utils_exploratoire import display_tokens_infos
+from utils.utils_exploratoire import display_tokens_infos
 
 def test_display_tokens_infos_small_list(capfd):
     tokens = ["test", "test", "example", "example", "test"]
@@ -59,7 +65,7 @@ def test_display_tokens_infos_small_list(capfd):
 import pytest
 from collections import Counter
 from nltk import pos_tag
-from utils_exploratoire import analyze_pos_tags  # Assurez-vous que ce chemin d'importation est correct
+from utils.utils_exploratoire import analyze_pos_tags  # Assurez-vous que ce chemin d'importation est correct
 
 def test_analyze_pos_tags(capfd):
     unique_tags = ["dog", "bark", "cat", "meow", "programming", "coding", "test", "testing", "analysis", "analyzing"]
@@ -84,7 +90,7 @@ def test_analyze_pos_tags(capfd):
 ########################## Teste de la fonction process_clean_text ############################
 
 import pytest
-from utils_exploratoire import process_clean_text, stop_words  
+from utils.utils_exploratoire import process_clean_text, stop_words  
 
 
 
@@ -107,7 +113,7 @@ def test_process_clean_text(doc, rejoin, expected_result):
 import pytest
 from bs4 import BeautifulSoup
 import re
-from utils_exploratoire import clean_html  
+from utils.utils_exploratoire import clean_html  
 
 @pytest.mark.parametrize("input_html, expected_output", [
     ("<p>Visit our site <a href='http://example.com'>here</a></p>", "Visit our site "),  # Test de suppression des URLs
@@ -129,7 +135,7 @@ def test_clean_html(input_html, expected_output):
 
 import pytest
 from sklearn.feature_extraction.text import TfidfVectorizer
-from utils_non_supervised import vectorizer_transform  
+from utils.utils_non_supervised import vectorizer_transform  
 
 @pytest.fixture
 def setup_tfidf_vectorizer():
@@ -155,7 +161,7 @@ def test_vectorizer_transform(input_data, expected_shape, setup_tfidf_vectorizer
     
 import pytest
 import numpy as np
-from utils_non_supervised import filter_words  
+from utils.utils_non_supervised import filter_words  
 
 @pytest.mark.parametrize("new_words, threshold, expected_result", [
     (np.array([0.002, 0.0005, 0.1, 0.05]), 0.001, np.array([0.002, 0, 0.1, 0.05])),  # Cas où certains mots sont en dessous du seuil
@@ -173,7 +179,7 @@ def test_filter_words(new_words, threshold, expected_result):
 
 import pytest
 import pandas as pd
-from utils_non_supervised  import coverage_rate  
+from utils.utils_non_supervised  import coverage_rate  
 
 # Exemple de données de test pour DataFrame
 @pytest.fixture
@@ -207,7 +213,7 @@ def test_coverage_rate(tags_df):
 import pytest
 import numpy as np
 from sklearn.metrics import jaccard_score
-from utils_supervised  import jaccard  
+from utils.utils_supervised  import jaccard  
 
 
 # teste 1: Vérification du calcul du score de Jaccard pour différents scénarios standards.

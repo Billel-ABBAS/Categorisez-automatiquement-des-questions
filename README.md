@@ -61,7 +61,6 @@ Les modèles suivants ont été comparés dans ce projet :
 
 Le modèle XGBoost s'est avéré être le plus performant parmi les modèles supervisés, avec un score de Jaccard moyen de 0.622 et un taux de couverture de 0.27. Ce taux de couverture était significativement meilleur que celui obtenu avec les approches non supervisées (0.1 pour LDA et NMF, et < 0.0001 pour les modèles semi-supervisés). Grâce à ce taux de couverture supérieur, le modèle XGBoost supervisé a été choisi comme le meilleur modèle pour être implémenté dans l'API Streamlit.
 
-
 ## Déploiement de l'API
 
 L'API de suggestion de tags, basée sur le modèle XGBoost, est déployée sur Streamlit Cloud. Vous pouvez accéder à l'API via le lien suivant :
