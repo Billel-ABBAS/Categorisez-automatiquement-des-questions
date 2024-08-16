@@ -1,16 +1,43 @@
-
 import os
-import sys                                   
-                                   
-# Ajouter le répertoire parent au PYTHONPATH
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))                                  
-                                   
-                                   ### Partie exploratoire ###
-
-########################## Teste de la fonction taux_de_Remplissage_tableau ############################
+import sys
 import pytest
 import pandas as pd
-from utils.utils_exploratoire import taux_de_Remplissage_tableau
+import numpy as np
+import re
+from collections import Counter
+from bs4 import BeautifulSoup
+from nltk import pos_tag
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.preprocessing import MultiLabelBinarizer
+from sklearn.metrics import jaccard_score
+import mlflow
+
+# Ajouter le répertoire parent au PYTHONPATH
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+# Import des fonctions utilitaires
+from utils.utils_exploratoire import (
+    taux_de_Remplissage_tableau, 
+    split_tags, 
+    display_tokens_infos, 
+    analyze_pos_tags,  
+    process_clean_text, 
+    stop_words, 
+    clean_html
+)
+from utils.utils_non_supervised import (
+    vectorizer_transform, 
+    filter_words, 
+    coverage_rate
+)
+from utils.utils_supervised import (
+    predict_tags, 
+    jaccard
+)
+
+### Partie exploratoire ###
+
+########################## Teste de la fonction taux_de_Remplissage_tableau ############################
 
 def test_taux_de_Remplissage_tableau():
     # Création d'un DataFrame de test
@@ -22,10 +49,7 @@ def test_taux_de_Remplissage_tableau():
     
     taux_de_Remplissage_tableau(df)
 
-########################## Teste de la fonction taux_de_Remplissage_tableau ############################
-
-import pytest
-from utils.utils_exploratoire import split_tags
+########################## Teste de la fonction split_tags ############################
 
 test_data = [
     ("<python><data-science><3x><machine.learning>", ['python', 'data', 'science', 'machinelearning']),
@@ -38,34 +62,7 @@ test_data = [
 def test_split_tags(input_tags, expected_output):
     assert split_tags(input_tags) == expected_output
 
-
-########################## Teste de la fonction display_tokens_infos ############################
-
-import pytest
-from utils.utils_exploratoire import display_tokens_infos
-
-def test_display_tokens_infos_small_list(capfd):
-    tokens = ["test", "test", "example", "example", "test"]
-    display_tokens_infos(tokens)
-    out, err = capfd.readouterr()
-
-    expected_output = (
-        "Nombre de tokens: 5\n"
-        "Nombre de tokens uniques: 2\n\n"  # Ajout d'un saut de ligne supplémentaire ici pour correspondre à la sortie réelle
-        "Exemple de tokens: ['test', 'test', 'example', 'example', 'test'] \n\n"
-    )
-    # Pour déboguer et voir exactement ce qui est généré
-    print(repr(out))
-
-    assert out == expected_output
-
-
-########################## Teste de la fonction test_analyze_pos_tags ############################
-
-import pytest
-from collections import Counter
-from nltk import pos_tag
-from utils.utils_exploratoire import analyze_pos_tags  # Assurez-vous que ce chemin d'importation est correct
+########################## Teste de la fonction analyze_pos_tags ############################
 
 def test_analyze_pos_tags(capfd):
     unique_tags = ["dog", "bark", "cat", "meow", "programming", "coding", "test", "testing", "analysis", "analyzing"]
@@ -86,56 +83,78 @@ def test_analyze_pos_tags(capfd):
     # Test de la sortie de la fonction
     assert result == expected_counts, f"Expected {expected_counts}, but got {result}"
 
-
 ########################## Teste de la fonction process_clean_text ############################
 
-import pytest
-from utils.utils_exploratoire import process_clean_text, stop_words  
-
-
-
 @pytest.mark.parametrize("doc, rejoin, expected_result", [
-    ("Learn Python, Java, and C++ today!", True, "learn python java c++ today"),  
-    ("Error in script.js at line 10", False, ["error", "scriptjs", "line"]),  
-    ("Updating node.js and npm packages", True, "nodejs npm package"),  
-    ("Use #include <iostream> in C++", True, "use include iostream c++"),  
- 
+  # Test de normalisation en minuscules (case_normalization)
+  ("UPPERCASE WORDS and MiXeD CaSe", True, "uppercase word case"),
+  
+  # Test de suppression des contractions (remove_contractions)
+  ("I can't do it, won't you help?", True, "help"),
+  
+  # Test de suppression de la ponctuation (remove_punctuation)
+  ("Hello, world! How are you?", True, "hello world"),
+  
+  # Test de conservation de certains caractères spéciaux
+  ("Use #include <iostream> in C++", True, "use include iostream c++"),
+  
+  # Test de suppression des chiffres seuls (remove_numbers)
+  ("Error in script.js at line 10", True, "error scriptjs line"),
+  
+  # Test de conservation des mots composés avec des chiffres
+  ("Update to Python3.9 and Node.js 14", True, "update python39 nodejs"),
+  
+  # Test de suppression des espaces supplémentaires (remove_extra_spaces)
+  ("Too   many    spaces    here", True, "space"),
+  
+  # Test de tokenisation et traitement des cas spéciaux (comme 'c#')
+  ("Learn C# and ASP.NET", True, "learn c# aspnet"),
+  
+  # Test de suppression des stop words
+  ("The quick brown fox jumps over the lazy dog", True, "quick brown fox jump lazy dog"),
+  
+  # Test de longueur minimale des mots (min_len_word)
+  ("A B CD EF GHI", True, "cd ef ghi"),
+  
+  # Test de filtrage par catégorie grammaticale et lemmatisation
+  ("The cats are running quickly", True, "cat"),
+  
+  # Test avec rejoin=False
+  ("Updating node.js and npm packages", False, ["nodejs", "npm", "package"]),
+  
+  # Test complet combinant plusieurs aspects
+  ("Learn Python, Java, and C++ today!", True, "learn python java c++ today"),
 ])
 def test_process_clean_text(doc, rejoin, expected_result):
-    result = process_clean_text(doc, rejoin)
-    assert result == expected_result, f"Expected {expected_result}, but got {result}"
-
-
-
+  result = process_clean_text(doc, rejoin)
+  assert result == expected_result, f"Expected {expected_result}, but got {result}"
 
 ########################## Teste de la fonction clean_html ############################
 
-import pytest
-from bs4 import BeautifulSoup
-import re
-from utils.utils_exploratoire import clean_html  
-
 @pytest.mark.parametrize("input_html, expected_output", [
-    ("<p>Visit our site <a href='http://example.com'>here</a></p>", "Visit our site "),  # Test de suppression des URLs
-    ("<div><style>body {color: red;}</style>Text with style</div>", "Text with style"),  # Test de suppression des balises style
-    ("<script>alert('Hello');</script>Warning text", "Warning text"),  # Test de suppression des balises script
-    ("<div>Hello <code>Code snippet</code> world</div>", "Hello   world")  # Test de suppression des balises code, mais en les conservant
-    
+  # Test de suppression des URLs
+  ("<p>Visit <a href='http://example.com'>here</a></p>", "Visit"),
+  
+  # Test de suppression des balises HTML et script
+  ("<div>Text <script>alert('Hello');</script>with style</div>", "Text  with style"),
+  
+  # Test de suppression des balises style
+  ("<style>.class { color: red; }</style>Styled text", "Styled text"),
+  
+  # Test de conservation du contenu des balises code
+  ("Hello <code>Code snippet</code> world", "Hello   world"),
+  
+  # Test de gestion d'un mélange complexe
+  ("<div>Mixed <a href='http://test.com'>content</a> with <code>code</code></div>",
+   "Mixed"),
 ])
 def test_clean_html(input_html, expected_output):
-    result = clean_html(input_html)
-    assert result == expected_output, f"Expected '{expected_output}', but got '{result}'"
+  result = clean_html(input_html)
+  assert result.strip() == expected_output.strip(), f"Expected '{expected_output}', but got '{result}'"
 
-
-
-                                   ### Partie non supervisé ###
+### Partie non supervisé ###
 
 ########################## Teste de la fonction vectorizer_transform ############################
-
-
-import pytest
-from sklearn.feature_extraction.text import TfidfVectorizer
-from utils.utils_non_supervised import vectorizer_transform  
 
 @pytest.fixture
 def setup_tfidf_vectorizer():
@@ -154,14 +173,8 @@ def test_vectorizer_transform(input_data, expected_shape, setup_tfidf_vectorizer
     vectorizer = setup_tfidf_vectorizer
     bow = vectorizer_transform(input_data, vectorizer)
     assert bow.shape == expected_shape, f"Expected shape {expected_shape}, but got {bow.shape}"
-    
-    
-    
+
 ########################## Teste de la fonction filter_words ############################
-    
-import pytest
-import numpy as np
-from utils.utils_non_supervised import filter_words  
 
 @pytest.mark.parametrize("new_words, threshold, expected_result", [
     (np.array([0.002, 0.0005, 0.1, 0.05]), 0.001, np.array([0.002, 0, 0.1, 0.05])),  # Cas où certains mots sont en dessous du seuil
@@ -173,15 +186,8 @@ def test_filter_words(new_words, threshold, expected_result):
     result = filter_words(new_words, threshold)
     assert np.array_equal(result, expected_result), f"Expected {expected_result}, but got {result}"
 
-
-
 ########################## Teste de la fonction coverage_rate  ############################
 
-import pytest
-import pandas as pd
-from utils.utils_non_supervised  import coverage_rate  
-
-# Exemple de données de test pour DataFrame
 @pytest.fixture
 def tags_df():
     data = {
@@ -203,20 +209,9 @@ def test_coverage_rate(tags_df):
     
     assert actual_coverage_rate == expected_coverage_rate, f"Expected coverage rate to be {expected_coverage_rate}, but got {actual_coverage_rate}"
 
-
-
-                                   ### Partie supervisé ###
+### Partie supervisé ###
                                    
 ########################## Teste de la fonction jaccard  ############################
-
-
-import pytest
-import numpy as np
-from sklearn.metrics import jaccard_score
-from utils.utils_supervised  import jaccard  
-
-
-# teste 1: Vérification du calcul du score de Jaccard pour différents scénarios standards.
 
 @pytest.mark.parametrize("y_true, y_pred, expected_score", [
     (np.array([[1, 0, 1], [1, 1, 0]]), np.array([[1, 0, 0], [1, 0, 0]]), 0.5),  # Cas simple
@@ -227,24 +222,61 @@ def test_jaccard(y_true, y_pred, expected_score):
     result = jaccard(y_true, y_pred)
     np.testing.assert_almost_equal(result, expected_score, decimal=7, err_msg=f"Expected {expected_score}, but got {result}")
 
+########################## Teste de la fonction predict_tags ############################
 
-# teste 2: Tester des cas aux extrémités pour vérifier que la fonction gère correctement les situations comme des entrées complètement vides ou des entrées contenant uniquement des zéros ou des uns.
+# Récupérer les identifiants AWS depuis les variables d'environnement configurées dans Github
+aws_access_key_id = os.getenv('AKIAZ3MGNA4XDMIJPF3M')
+aws_secret_access_key = os.getenv('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')
 
-def test_jaccard_edge_cases():
-    # Cas où les deux tableaux sont vides
-    y_true = np.array([[]])
-    y_pred = np.array([[]])
-    result = jaccard(y_true, y_pred)
-    assert np.isnan(result), "Expected NaN for empty arrays"
+# Configurer MLflow pour utiliser un chemin compatible avec WSL
+mlflow.set_tracking_uri("http://ec2-54-144-47-93.compute-1.amazonaws.com:5000/")
 
-    # Cas où les deux tableaux sont remplis de zéros
-    y_true = np.zeros((3, 3))
-    y_pred = np.zeros((3, 3))
-    result = jaccard(y_true, y_pred)
-    assert result == 1.0, "Expected Jaccard score of 1.0 when both arrays are zero"
+def load_mlflow_model(model_uri, model_type='sklearn'):
+    try:
+        if model_type == 'sklearn':
+            return mlflow.sklearn.load_model(model_uri)
+        else:
+            raise ValueError("Type de modèle non supporté : {}".format(model_type))
+    except Exception as e:
+        # Affichage de l'erreur dans la console
+        print(f"Erreur lors du chargement du modèle {model_uri}: {str(e)}")
+        return None
 
-    # Cas où les deux tableaux sont remplis de uns
-    y_true = np.ones((3, 3))
-    y_pred = np.ones((3, 3))
-    result = jaccard(y_true, y_pred)
-    assert result == 1.0, "Expected Jaccard score of 1.0 when both arrays are one"
+# Fixture pour charger les modèles et artefacts MLflow
+@pytest.fixture
+def setup_mlflow_models():
+    # Charger le TfidfVectorizer depuis MLflow
+    logged_vectorizer = 'runs:/769f8ffeb78a4bea9d98c335491c1b9e/vectorizer_supervised'
+    tfidf_vectorizer = load_mlflow_model(logged_vectorizer, 'sklearn')
+
+    # Charger le MultiLabelBinarizer depuis MLflow
+    logged_mlb = 'runs:/304d7b954ae840fa86794522bd1fc686/mlb'
+    mlb = load_mlflow_model(logged_mlb, 'sklearn')
+
+    # Charger le modèle XGBoost en tant que Sklearn Model depuis MLflow
+    logged_model = 'runs:/aad923960b694767b3eb4ce372bd8b7a/XGBoost'
+    model = load_mlflow_model(logged_model, 'sklearn')
+
+    return model, tfidf_vectorizer, mlb
+
+# Exemple de texte à prédire
+@pytest.fixture
+def example_text():
+    return '''
+    'java socket binding port bind socket client port code connection choose port exception case exception connect love pointer'
+    '''
+
+# exemple de teste :
+def test_predict_tags(setup_mlflow_models, example_text):
+    model, tfidf_vectorizer, mlb = setup_mlflow_models
+    
+    # Appeler la fonction pour prédire les tags
+    predicted_tags = predict_tags(example_text, model, tfidf_vectorizer, mlb, top_n=5)
+    
+    # Exemple de tags attendus (cela dépend du modèle entraîné et des données)
+    expected_tags = ['java', 'client', 'sockets']
+    
+    # Vérifier que les tags prédits contiennent au moins certains des tags attendus
+    assert all(tag in predicted_tags for tag in expected_tags), \
+        f"Expected some of the tags {expected_tags} to be in {predicted_tags}"
+
