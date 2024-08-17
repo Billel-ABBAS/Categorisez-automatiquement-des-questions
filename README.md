@@ -15,24 +15,32 @@ Les principales étapes du projet comprenaient :
 Le repository contient les éléments suivants :
 
 1. **Abbas_Billel_1_notebook_requete_API_072024.ipynb** : Ce notebook est consacré aux requêtes API pour extraire les données depuis StackExchange Explorer.
-
+   
 2. **Abbas_Billel_2_notebook_exploration_072024.ipynb** : Ce notebook est dédié à l'analyse exploratoire des données afin de comprendre la structure des données et les préparer pour la modélisation.
 
 3. **Abbas_Billel_3_notebook_approche_non_supervisée_072024.ipynb** : Ce notebook couvre les différentes étapes du prétraitement des données textuelles et l'entraînement des modèles non supervisés.
 
 4. **Abbas_Billel_4_notebook_approche_supervisée_072024.ipynb** : Ce notebook traite de l'entraînement des modèles supervisés.
 
-Le repository contient 3 dossiers :
+Le repository contient également les dossiers suivants :
 
+- **`data`** : Ce dossier est destiné à contenir les données utilisées dans le projet.
+  
 - **`mlflow`** : Ce dossier contient un module Python pour l'entraînement des modèles supervisés, en utilisant **MLflow** pour suivre les expériences et stocker les résultats. Le meilleur modèle est automatiquement sauvegardé dans un bucket AWS. On stocke dans ce même bucket AWS le modèle **MLB** (MultiLabelBinarizer) ainsi que le **TfidfVectorizer**. Ces modèles seront utilisés par l'API de prédiction déployée sur Streamlit.
 
-- **`streamlit`** : Ce dossier contient le module Python `api-streamlit.py` et le fichier `requirements.txt` nécessaires pour lancer l'API sur Streamlit Cloud. L'API utilise les modèles sauvegardés pour fournir des suggestions de tags en fonction des questions posées par les utilisateurs de Stack Overflow. Le dossier contient également `test_utils_api.py`, un script de test qui, à chaque `git push`, déclenche un workflow **pytest** dans GitHub grâce au fichier `.github/workflows/main.yml`.
+- **`streamlit`** : Ce dossier contient le module Python `api.py` nécessaire pour lancer l'API sur Streamlit Cloud. L'API utilise les modèles sauvegardés pour fournir des suggestions de tags en fonction des questions posées par les utilisateurs de Stack Overflow.
 
+  **`requirements.txt`** : Ce fichier est présent dans la racine du repository, mais Streamlit Cloud parvient toujours à l'utiliser pour installer les dépendances nécessaires au bon fonctionnement de l'API.
+
+- **`tests`** : Ce dossier contient les scripts de tests unitaires pour valider les fonctions du projet. Plus précisément :
+  - **`test_utils.py`** : Ce fichier permet de tester localement et dans GitHub les fonctions définies dans les modules du dossier `utils` à l'aide de **pytest**.
+  
 - **`utils`** : Ce dossier regroupe les modules Python contenant les fonctions nécessaires pour l'analyse exploratoire des données, ainsi que pour les approches supervisée et non supervisée. Plus précisément, il inclut :
   - `utils_exploratoire.py` : Ce module contient les fonctions pour l'analyse exploratoire des données.
   - `utils_non_supervised.py` : Ce module regroupe les fonctions utilisées pour les approches non supervisées.
   - `utils_supervised.py` : Ce module contient les fonctions dédiées aux méthodes supervisées.
-  - `test_utils.py` : Ce fichier permet de tester localement les fonctions définies dans ces modules à l'aide de **pytest**.
+
+- **`.github/workflows`** : Ce dossier contient le fichier `main.yml` qui automatise les tests avec **pytest** à chaque `git push`.
 
 ## Données
 
@@ -72,4 +80,5 @@ L'API de suggestion de tags, basée sur le modèle XGBoost, est déployée sur S
 Les expérimentations et le suivi des modèles ont été effectués à l'aide de **MLflow**. Vous pouvez accéder au tableau de bord MLflow pour visualiser les différentes expériences et les modèles entraînés via le lien suivant :
 
 [Accéder au tableau de bord MLflow](http://ec2-54-144-47-93.compute-1.amazonaws.com:5000/#/experiments/107027379712999727?searchFilter=&orderByKey=attributes.start_time&orderByAsc=false&startTime=ALL&lifecycleFilter=Active&modelVersionFilter=All+Runs&datasetsFilter=W10%3D)
+
 
