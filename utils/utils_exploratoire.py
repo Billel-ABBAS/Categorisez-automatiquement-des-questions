@@ -82,12 +82,12 @@ def display_tokens_infos(tokens):
     print("Exemple de tokens:", tokens[:30], "\n")
 
 # Générer et afficher un word cloud pour une liste de tags
-def generate_wordcloud(corpus_tags):
+def generate_wordcloud(corpus_tags, title):
     combined_tags = ' '.join(corpus_tags)
     wordcloud_tags = WordCloud(width=800, height=400, background_color='white').generate(combined_tags)
     plt.figure(figsize=(10, 5))
     plt.imshow(wordcloud_tags, interpolation='bilinear')
-    plt.title('Word Cloud des Split Tags')
+    plt.title(title)
     plt.axis('off')
     plt.show()
 
@@ -240,11 +240,11 @@ def clean_html(text):
     # Utilisation du parser lxml pour une analyse plus robuste
     soup = BeautifulSoup(text, 'lxml')
 
-    # Suppression des balises <style> et <script>
+    # Suppression des balises <style> , <script> et <code>
     for element in soup(['style', 'script', 'code']):
         element.extract()
 
-    # Récupération du texte nettoyé incluant le contenu des balises <code>
+    # Récupération du texte nettoyé 
     cleaned_text = soup.get_text(separator=' ')
 
     return cleaned_text
