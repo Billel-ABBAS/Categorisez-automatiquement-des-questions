@@ -225,8 +225,8 @@ def test_jaccard(y_true, y_pred, expected_score):
 ########################## Teste de la fonction predict_tags ############################
 
 # Récupérer les identifiants AWS depuis les variables d'environnement configurées dans Github
-aws_access_key_id = os.getenv('AKIAZ3MGNA4XDMIJPF3M')
-aws_secret_access_key = os.getenv('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')
+aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID')
+aws_secret_access_key = os.getenv('AWS_SECRET_ACCESS_KEY')
 
 # Configurer MLflow pour utiliser un chemin compatible avec WSL
 mlflow.set_tracking_uri("http://ec2-54-144-47-93.compute-1.amazonaws.com:5000/")
