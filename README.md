@@ -73,7 +73,7 @@ Le modèle XGBoost s'est avéré être le plus performant parmi les modèles sup
 
 L'API de suggestion de tags, basée sur le modèle XGBoost, est déployée sur Streamlit Cloud. Vous pouvez accéder à l'API via le lien suivant :
 
-[Accéder à l'API de suggestion de tags sur Streamlit Cloud](https://projetsopc-mxghp6jylqfnkkel6igu2f.streamlit.app/)
+[Accéder à l'API de suggestion de tags sur Streamlit Cloud](https://categorisez-automatiquement-des-questions-wjrd3qkapyiswmsztpdr.streamlit.app/)
 
 ## Suivi des Modèles avec MLflow
 
