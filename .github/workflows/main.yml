@@ -21,11 +21,10 @@ jobs:
     - name: Install system dependencies
       run: |
         sudo apt-get update
-        # Installer les dépendances nécessaires sans 'python3-distutils'
         sudo apt-get install -y libxml2-dev libxslt-dev
-        # Installer python3-distutils via pip (si disponible) ou manuellement
-        wget http://archive.ubuntu.com/ubuntu/pool/universe/p/python3-distutils/python3-distutils_3.11.11-1_all.deb
-        sudo dpkg -i python3-distutils_3.11.11-1_all.deb || true
+        # Installer python3-distutils via téléchargement manuel si indisponible
+        wget http://archive.ubuntu.com/ubuntu/pool/universe/p/python3-distutils/python3-distutils_3.11.1-1_all.deb
+        sudo dpkg -i python3-distutils_3.11.1-1_all.deb || true
 
     - name: Install dependencies
       run: |
