@@ -19,7 +19,7 @@ import ast
 
 # Configurer l'URI de suivi pour utiliser un serveur de suivi MLflow distant
 mlflow.set_tracking_uri("http://ec2-54-144-47-93.compute-1.amazonaws.com:5000/")
-mlflow.set_experiment("tagging_experiment")
+mlflow.set_experiment("tagging_experiment_NLP")
 
 # Charger les données nettoyées
 df = pd.read_csv('../data/stack_overflow_data_cleaned.csv')
