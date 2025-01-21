@@ -246,15 +246,15 @@ def load_mlflow_model(model_uri, model_type='sklearn'):
 @pytest.fixture
 def setup_mlflow_models():
     # Charger le TfidfVectorizer depuis MLflow
-    logged_vectorizer = 'runs:/769f8ffeb78a4bea9d98c335491c1b9e/vectorizer_supervised'
+    logged_vectorizer = 'runs:/e614fbf9d9104f128aabef80e261cc51/vectorizer_supervised'
     tfidf_vectorizer = load_mlflow_model(logged_vectorizer, 'sklearn')
 
     # Charger le MultiLabelBinarizer depuis MLflow
-    logged_mlb = 'runs:/304d7b954ae840fa86794522bd1fc686/mlb'
+    logged_mlb = 'runs:/e01623a6cb0e4330819fc438b28e03ba/mlb'
     mlb = load_mlflow_model(logged_mlb, 'sklearn')
 
     # Charger le modèle XGBoost en tant que Sklearn Model depuis MLflow
-    logged_model = 'runs:/aad923960b694767b3eb4ce372bd8b7a/XGBoost'
+    logged_model = 'runs:/1bf16235c76f47fda1a1d5f5355994af/XGBoost'
     model = load_mlflow_model(logged_model, 'sklearn')
 
     return model, tfidf_vectorizer, mlb
